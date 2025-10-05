@@ -11,8 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Show repo tree (debug)
+        run: |
+          echo "PWD: $(pwd)"
+          find . -maxdepth 3 -type f | sort || true
+
       - name: Install Dependencies
-        run: pip install -r tourism_project/requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f tourism_project/requirements.txt ]; then
+            pip install -r tourism_project/requirements.txt
+          elif [ -f week_3_mls/requirements.txt ]; then
+            pip install -r week_3_mls/requirements.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; installing minimal deps..."
+            pip install pandas scikit-learn xgboost mlflow joblib huggingface_hub datasets requests
+          fi
+
       - name: Upload Dataset to Hugging Face Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -23,8 +41,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Install Dependencies
-        run: pip install -r tourism_project/requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f tourism_project/requirements.txt ]; then
+            pip install -r tourism_project/requirements.txt
+          elif [ -f week_3_mls/requirements.txt ]; then
+            pip install -r week_3_mls/requirements.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; installing minimal deps..."
+            pip install pandas scikit-learn xgboost mlflow joblib huggingface_hub datasets requests
+          fi
+
       - name: Run Data Preparation
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -35,8 +66,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Install Dependencies
-        run: pip install -r tourism_project/requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f tourism_project/requirements.txt ]; then
+            pip install -r tourism_project/requirements.txt
+          elif [ -f week_3_mls/requirements.txt ]; then
+            pip install -r week_3_mls/requirements.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; installing minimal deps..."
+            pip install pandas scikit-learn xgboost mlflow joblib huggingface_hub datasets requests
+          fi
+
       - name: Start MLflow Server
         run: |
           nohup mlflow ui --host 0.0.0.0 --port 5000 &  # Run MLflow UI in the background
@@ -51,8 +95,21 @@ jobs:
     needs: [model-traning, data-prep, register-dataset]
     steps:
       - uses: actions/checkout@v3
+
       - name: Install Dependencies
-        run: pip install -r tourism_project/requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f tourism_project/requirements.txt ]; then
+            pip install -r tourism_project/requirements.txt
+          elif [ -f week_3_mls/requirements.txt ]; then
+            pip install -r week_3_mls/requirements.txt
+          elif [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          else
+            echo "No requirements.txt found; installing minimal deps..."
+            pip install pandas scikit-learn xgboost mlflow joblib huggingface_hub datasets requests
+          fi
+
       - name: Push files to Frontend Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
